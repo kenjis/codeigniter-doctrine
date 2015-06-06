@@ -1,0 +1,25 @@
+{
+    "name": "kenjis/codeigniter-doctrine",
+    "type": "project",
+    "description": "A simple Doctrine integration for CodeIgniter 3.0",
+    "keywords": [
+        "codeigniter",
+        "doctrine"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kenji Suzuki",
+            "homepage": "https://github.com/kenjis/codeigniter-doctrine"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "doctrine/orm": "~2.5"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
