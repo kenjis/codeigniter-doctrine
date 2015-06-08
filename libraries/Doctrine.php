@@ -33,7 +33,7 @@ class Doctrine
 
         $entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/"));
         $entitiesClassLoader->register();
-        $proxiesClassLoader = new ClassLoader('Proxies', APPPATH . 'models/proxies');
+        $proxiesClassLoader = new ClassLoader('Proxies', APPPATH . 'models/Proxies');
         $proxiesClassLoader->register();
 
         // Set up caches
@@ -47,7 +47,7 @@ class Doctrine
         $config->setQueryCacheImpl($cache);
 
         // Proxy configuration
-        $config->setProxyDir(APPPATH . '/models/proxies');
+        $config->setProxyDir(APPPATH . '/models/Proxies');
         $config->setProxyNamespace('Proxies');
 
         // Set up logger
@@ -57,13 +57,29 @@ class Doctrine
         $config->setAutoGenerateProxyClasses(true);
 
         // Database connection information
-        $connectionOptions = array(
-            'driver'   => $db['default']['dbdriver'],
-            'user'     => $db['default']['username'],
-            'password' => $db['default']['password'],
-            'host'     => $db['default']['hostname'],
-            'dbname'   => $db['default']['database']
-        );
+        if ($db['default']['dbdriver'] === 'pdo') {
+            if (substr($db['default']['hostname'], 0, 7) === 'sqlite:') {
+                $connectionOptions = array(
+                    'driver'   => 'pdo_sqlite',
+                    'user'     => $db['default']['username'],
+                    'password' => $db['default']['password'],
+                    'path'     => preg_replace('/\Asqlite:/', '', $db['default']['hostname']),
+                );
+            } else {
+                throw new Exception('Your Database Configuration is not confirmed by CodeIgniter Doctrine');
+            }
+        } elseif ($db['default']['dbdriver'] === 'mysqli') {
+            $connectionOptions = array(
+                'driver'   => $db['default']['dbdriver'],
+                'user'     => $db['default']['username'],
+                'password' => $db['default']['password'],
+                'host'     => $db['default']['hostname'],
+                'dbname'   => $db['default']['database'],
+                'charset'  => $db['default']['char_set'],
+            );
+        } else {
+            throw new Exception('Your Database Configuration is not confirmed by CodeIgniter Doctrine');
+        }
 
         // Create EntityManager
         $this->em = EntityManager::create($connectionOptions, $config);
