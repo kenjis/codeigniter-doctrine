@@ -29,7 +29,7 @@ class Doctrine
             && ! file_exists($file_path = APPPATH.'config/database.php')) {
             throw new Exception('The configuration file database.php does not exist.');
         }
-        require_once $file_path;
+        require $file_path;
 
         $entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/"));
         $entitiesClassLoader->register();
@@ -57,31 +57,75 @@ class Doctrine
         $config->setAutoGenerateProxyClasses(true);
 
         // Database connection information
-        if ($db['default']['dbdriver'] === 'pdo') {
-            if (substr($db['default']['hostname'], 0, 7) === 'sqlite:') {
-                $connectionOptions = array(
-                    'driver'   => 'pdo_sqlite',
-                    'user'     => $db['default']['username'],
-                    'password' => $db['default']['password'],
-                    'path'     => preg_replace('/\Asqlite:/', '', $db['default']['hostname']),
-                );
-            } else {
-                throw new Exception('Your Database Configuration is not confirmed by CodeIgniter Doctrine');
-            }
-        } elseif ($db['default']['dbdriver'] === 'mysqli') {
-            $connectionOptions = array(
-                'driver'   => $db['default']['dbdriver'],
-                'user'     => $db['default']['username'],
-                'password' => $db['default']['password'],
-                'host'     => $db['default']['hostname'],
-                'dbname'   => $db['default']['database'],
-                'charset'  => $db['default']['char_set'],
-            );
+        $connectionOptions = $this->convertDbConfig($db['default']);
+
+        // Create EntityManager
+        $this->em = EntityManager::create($connectionOptions, $config);
+    }
+
+    /**
+     * Convert CodeIgniter database config array to Doctrine's
+     * 
+     * See http://www.codeigniter.com/user_guide/database/configuration.html
+     * See http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html
+     * 
+     * @param array $db
+     * @return array
+     * @throws Exception
+     */
+    public function convertDbConfig($db)
+    {
+        $connectionOptions = [];
+
+        if ($db['dbdriver'] === 'pdo') {
+            return $this->convertDbConfigPdo($db);
+        } elseif ($db['dbdriver'] === 'mysqli') {
+            $connectionOptions = [
+                'driver'   => $db['dbdriver'],
+                'user'     => $db['username'],
+                'password' => $db['password'],
+                'host'     => $db['hostname'],
+                'dbname'   => $db['database'],
+                'charset'  => $db['char_set'],
+            ];
         } else {
             throw new Exception('Your Database Configuration is not confirmed by CodeIgniter Doctrine');
         }
 
-        // Create EntityManager
-        $this->em = EntityManager::create($connectionOptions, $config);
+        return $connectionOptions;
+    }
+
+    protected function convertDbConfigPdo($db)
+    {
+        $connectionOptions = [];
+
+        if (substr($db['hostname'], 0, 7) === 'sqlite:') {
+            $connectionOptions = [
+                'driver'   => 'pdo_sqlite',
+                'user'     => $db['username'],
+                'password' => $db['password'],
+                'path'     => preg_replace('/\Asqlite:/', '', $db['hostname']),
+            ];
+        } elseif (substr($db['dsn'], 0, 7) === 'sqlite:') {
+            $connectionOptions = [
+                'driver'   => 'pdo_sqlite',
+                'user'     => $db['username'],
+                'password' => $db['password'],
+                'path'     => preg_replace('/\Asqlite:/', '', $db['dsn']),
+            ];
+        } elseif (substr($db['dsn'], 0, 6) === 'mysql:') {
+            $connectionOptions = [
+                'driver'   => 'pdo_mysql',
+                'user'     => $db['username'],
+                'password' => $db['password'],
+                'host'     => $db['hostname'],
+                'dbname'   => $db['database'],
+                'charset'  => $db['char_set'],
+            ];
+        } else {
+            throw new Exception('Your Database Configuration is not confirmed by CodeIgniter Doctrine');
+        }
+
+        return $connectionOptions;
     }
 }

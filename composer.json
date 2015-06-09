@@ -17,6 +17,9 @@
         "php": ">=5.4.0",
         "doctrine/orm": "~2.5"
     },
+    "require-dev": {
+        "codeigniter/framework": "3.0.*"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
