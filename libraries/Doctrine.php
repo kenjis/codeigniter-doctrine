@@ -22,6 +22,8 @@ class Doctrine
 {
     public $em = null;
 
+    public $debug = 0;
+
     public function __construct()
     {
         // load database configuration from CodeIgniter
@@ -51,8 +53,10 @@ class Doctrine
         $config->setProxyNamespace('Proxies');
 
         // Set up logger
-        $logger = new EchoSQLLogger;
-        $config->setSQLLogger($logger);
+        if ($this->debug > 0) {
+            $logger = new EchoSQLLogger;
+            $config->setSQLLogger($logger);
+        }
 
         $config->setAutoGenerateProxyClasses(true);
 
