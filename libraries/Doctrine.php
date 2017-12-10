@@ -20,8 +20,14 @@ use Doctrine\DBAL\Logging\EchoSQLLogger;
 
 class Doctrine
 {
+    /**
+     * @var EntityManager|null
+     */
     public $em = null;
 
+    /**
+     * @var int debug level
+     */
     public $debug = 0;
 
     public function __construct()
@@ -69,10 +75,10 @@ class Doctrine
 
     /**
      * Convert CodeIgniter database config array to Doctrine's
-     * 
+     *
      * See http://www.codeigniter.com/user_guide/database/configuration.html
      * See http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html
-     * 
+     *
      * @param array $db
      * @return array
      * @throws Exception
