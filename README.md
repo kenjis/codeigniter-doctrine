@@ -1,6 +1,6 @@
 # CodeIgniter Doctrine
 
-This package provides simple Doctrine integration for [CodeIgniter](https://github.com/bcit-ci/CodeIgniter) 3.0.
+This package provides simple Doctrine integration for [CodeIgniter](https://github.com/bcit-ci/CodeIgniter) 3.x.
 
 ## Folder Structure
 
@@ -8,7 +8,9 @@ This package provides simple Doctrine integration for [CodeIgniter](https://gith
 codeigniter/
 └── application/
     └── libraries/
-        └── Doctrine.php
+        └── codeigniter-doctrine/
+            └── libraries/
+                └── Doctrine.php
 ```
 
 ## Requirements
@@ -24,15 +26,6 @@ Install this project with Composer:
 $ cd /path/to/codeigniter/
 $ composer require kenjis/codeigniter-doctrine:1.0.x@dev
 ~~~
-
-Install `libraries/Doctrine.php` to your CodeIgniter application folder:
-
-~~~
-$ php vendor/kenjis/codeigniter-doctrine/install.php
-~~~
-
-* Above command always overwrites exisiting files.
-* You must run it at CodeIgniter project root folder.
 
 ## Usage
 
@@ -59,10 +52,10 @@ $ vendor/bin/doctrine
 
 * http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/
 
-## Related Projects for CodeIgniter 3.0
+## Related Projects for CodeIgniter 3.x
 
 * [CodeIgniter Composer Installer](https://github.com/kenjis/codeigniter-composer-installer)
 * [Cli for CodeIgniter 3.0](https://github.com/kenjis/codeigniter-cli)
-* [CI PHPUnit Test](https://github.com/kenjis/ci-phpunit-test)
+* [ci-phpunit-test](https://github.com/kenjis/ci-phpunit-test)
 * [CodeIgniter Simple and Secure Twig](https://github.com/kenjis/codeigniter-ss-twig)
 * [CodeIgniter Deployer](https://github.com/kenjis/codeigniter-deployer)
