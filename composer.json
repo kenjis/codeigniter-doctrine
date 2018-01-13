@@ -1,6 +1,6 @@
 {
     "name": "kenjis/codeigniter-doctrine",
-    "type": "project",
+    "type": "codeigniter-library",
     "description": "A simple Doctrine integration for CodeIgniter 3.0",
     "keywords": [
         "codeigniter",
@@ -13,12 +13,16 @@
             "homepage": "https://github.com/kenjis/codeigniter-doctrine"
         }
     ],
+    "autoload": {
+        "classmap": [ "libraries/Doctrine.php" ]
+    },
     "require": {
         "php": ">=5.4.0",
-        "doctrine/orm": "~2.5"
+        "doctrine/orm": "~2.5",
+        "composer/installers": "~1.0"
     },
     "require-dev": {
-        "codeigniter/framework": "3.0.*"
+        "codeigniter/framework": "~3.0"
     },
     "extra": {
         "branch-alias": {

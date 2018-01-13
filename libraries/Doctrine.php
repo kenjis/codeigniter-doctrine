@@ -20,7 +20,15 @@ use Doctrine\DBAL\Logging\EchoSQLLogger;
 
 class Doctrine
 {
+    /**
+     * @var EntityManager|null
+     */
     public $em = null;
+
+    /**
+     * @var int debug level
+     */
+    public $debug = 0;
 
     public function __construct()
     {
@@ -51,8 +59,10 @@ class Doctrine
         $config->setProxyNamespace('Proxies');
 
         // Set up logger
-        $logger = new EchoSQLLogger;
-        $config->setSQLLogger($logger);
+        if ($this->debug > 0) {
+            $logger = new EchoSQLLogger;
+            $config->setSQLLogger($logger);
+        }
 
         $config->setAutoGenerateProxyClasses(true);
 
@@ -65,10 +75,10 @@ class Doctrine
 
     /**
      * Convert CodeIgniter database config array to Doctrine's
-     * 
+     *
      * See http://www.codeigniter.com/user_guide/database/configuration.html
      * See http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html
-     * 
+     *
      * @param array $db
      * @return array
      * @throws Exception
