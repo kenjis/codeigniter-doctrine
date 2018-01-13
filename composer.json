@@ -1,7 +1,7 @@
 {
     "name": "kenjis/codeigniter-doctrine",
     "type": "codeigniter-library",
-    "description": "A simple Doctrine integration for CodeIgniter 3.0",
+    "description": "A simple Doctrine integration for CodeIgniter 3.x",
     "keywords": [
         "codeigniter",
         "doctrine"
